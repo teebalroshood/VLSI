@@ -1,0 +1,41 @@
+*** SPICE deck for cell DAC5{sch} from library Lab1_Teeb_Alroshood
+*** Created on Mon Sep 21, 2026 10:06:45
+*** Last revised on Mon Sep 21, 2026 20:21:02
+*** Written on Mon Sep 21, 2026 20:22:44 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Lab1_Teeb_Alroshood__R10k FROM CELL R10k{sch}
+.SUBCKT Lab1_Teeb_Alroshood__R10k in out
+Rresnwell@1 out in 10k
+.ENDS Lab1_Teeb_Alroshood__R10k
+
+.global gnd
+
+*** TOP LEVEL CELL: DAC5{sch}
+XR10k@0 b4 net@0 Lab1_Teeb_Alroshood__R10k
+XR10k@1 net@0 vout Lab1_Teeb_Alroshood__R10k
+XR10k@3 vout net@15 Lab1_Teeb_Alroshood__R10k
+XR10k@4 b3 net@3 Lab1_Teeb_Alroshood__R10k
+XR10k@5 net@3 net@15 Lab1_Teeb_Alroshood__R10k
+XR10k@6 net@15 net@16 Lab1_Teeb_Alroshood__R10k
+XR10k@7 b2 net@6 Lab1_Teeb_Alroshood__R10k
+XR10k@8 net@6 net@16 Lab1_Teeb_Alroshood__R10k
+XR10k@9 net@16 net@17 Lab1_Teeb_Alroshood__R10k
+XR10k@10 b1 net@9 Lab1_Teeb_Alroshood__R10k
+XR10k@11 net@9 net@17 Lab1_Teeb_Alroshood__R10k
+XR10k@12 net@17 net@18 Lab1_Teeb_Alroshood__R10k
+XR10k@13 b0 net@12 Lab1_Teeb_Alroshood__R10k
+XR10k@14 net@12 net@18 Lab1_Teeb_Alroshood__R10k
+XR10k@15 net@18 net@21 Lab1_Teeb_Alroshood__R10k
+XR10k@16 net@21 gnd Lab1_Teeb_Alroshood__R10k
+
+* Spice Code nodes in cell cell 'DAC5{sch}'
+Vb4 b4 0 DC 5
+Vb3 b3 0 DC 0
+Vb2 b2 0 DC 0
+Vb1 b1 0 DC 0
+Vb0 b0 0 DC 0
+Rload vout 0 10k
+.op
+.END
