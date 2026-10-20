@@ -1,0 +1,43 @@
+*** SPICE deck for cell test_inverters{sch} from library Lab4
+*** Created on Tue Oct 13, 2026 16:51:33
+*** Last revised on Wed Oct 14, 2026 11:45:44
+*** Written on Wed Oct 14, 2026 11:55:38 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+*CMOS/BULK-NWELL (PRELIMINARY PARAMETERS)
+
+.MODEL N NMOS LEVEL=1
++KP=60E-6 VTO=0.7 GAMMA=0.3 LAMBDA=0.05 PHI=0.6
++LD=0.05E-6 TOX=40E-9 CGSO=2.0E-10 CGDO=2.0E-10 CJ=2e-4
+.MODEL P PMOS LEVEL=1
++KP=20E-6 VTO=0.7 GAMMA=0.4 LAMBDA=0.05 PHI=0.6
++LD=0.05E-6 TOX=40E-9 CGSO=3.0E-10 CGDO=3.0E-10 CJ=2e-4
+.MODEL DIFFCAP D CJO=2e-4
+
+*** SUBCIRCUIT Lab4__inverter_1 FROM CELL inverter_1{sch}
+.SUBCKT Lab4__inverter_1 in out
+** GLOBAL gnd
+** GLOBAL vdd
+MnMOS out in gnd gnd N L=1.2U W=1.2U
+MpMOS vdd in out vdd P L=1.2U W=2.4U
+.ENDS Lab4__inverter_1
+
+*** SUBCIRCUIT Lab4__inverter_2 FROM CELL inverter_2{sch}
+.SUBCKT Lab4__inverter_2 in out
+** GLOBAL gnd
+** GLOBAL vdd
+MnMOS out in gnd gnd N L=1.2U W=4.8U
+MpMOS vdd in out vdd P L=1.2U W=9.6U
+.ENDS Lab4__inverter_2
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: test_inverters{sch}
+Xinverter@0 vin vout1 Lab4__inverter_1
+Xinverter@1 vin vout2 Lab4__inverter_2
+
+* Spice Code nodes in cell cell 'test_inverters{sch}'
+vdd vdd 0 DC 5
+vin vin 0 DC 0
+.dc vin 0 5 1m
+.END
