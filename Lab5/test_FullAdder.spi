@@ -1,0 +1,76 @@
+*** SPICE deck for cell test_FullAdder{sch} from library Lab5
+*** Created on Thu Oct 29, 2026 15:22:49
+*** Last revised on Fri Oct 30, 2026 11:52:50
+*** Written on Fri Oct 30, 2026 11:54:03 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+*CMOS/BULK-NWELL (PRELIMINARY PARAMETERS)
+.MODEL N NMOS LEVEL=1
++KP=60E-6 VTO=0.7 GAMMA=0.3 LAMBDA=0.05 PHI=0.6
++LD=0.05E-6 TOX=40E-9 CGSO=2.0E-10 CGDO=2.0E-10 CJ=2e-4
+.MODEL P PMOS LEVEL=1
++KP=20E-6 VTO=0.7 GAMMA=0.4 LAMBDA=0.05 PHI=0.6
++LD=0.05E-6 TOX=40E-9 CGSO=3.0E-10 CGDO=3.0E-10 CJ=2e-4
+.MODEL DIFFCAP D CJO=2e-4
+
+*** SUBCIRCUIT Lab5__NAND FROM CELL NAND{sch}
+.SUBCKT Lab5__NAND A B gnd Out vdd
+** GLOBAL gnd
+** GLOBAL vdd
+MnMOS Out A net@29 gnd N L=0.4U W=1.2U
+MnMOS_1 net@29 B gnd gnd N L=0.4U W=1.2U
+MpMOS vdd A Out vdd P L=0.4U W=1.2U
+MpMOS_1 vdd B Out vdd P L=0.4U W=1.2U
+.ENDS Lab5__NAND
+
+*** SUBCIRCUIT Lab5__XOR FROM CELL XOR{sch}
+.SUBCKT Lab5__XOR A B gnd Out vdd
+** GLOBAL gnd
+** GLOBAL vdd
+XNAND@0 A B gnd net@0 vdd Lab5__NAND
+XNAND@1 A net@0 gnd net@18 vdd Lab5__NAND
+XNAND@2 net@0 B gnd net@21 vdd Lab5__NAND
+XNAND@3 net@18 net@21 gnd Out vdd Lab5__NAND
+.ENDS Lab5__XOR
+
+*** SUBCIRCUIT Lab5__FullAdder FROM CELL FullAdder{sch}
+.SUBCKT Lab5__FullAdder A B Cin Cout gnd Sum vdd
+** GLOBAL gnd
+** GLOBAL vdd
+XN1 A B gnd net@26 vdd Lab5__NAND
+XN2 net@23 Cin gnd net@29 vdd Lab5__NAND
+XN3 net@26 net@29 gnd Cout vdd Lab5__NAND
+XX1 A B gnd net@23 vdd Lab5__XOR
+XX2 net@23 Cin gnd Sum vdd Lab5__XOR
+.ENDS Lab5__FullAdder
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: test_FullAdder{sch}
+Ccap@0 gnd Sum 0.1p
+Ccap@1 gnd Cout 0.1p
+XFullAdde@0 vina vinb vinc Cout gnd Sum vdd Lab5__FullAdder
+
+* Spice Code nodes in cell cell 'test_FullAdder{sch}'
+vdd vdd 0 DC 5
+vina vina 0 pulse(0v 5v 19n 1n 1n 19n 40n)
+vinb vinb 0 pulse(0v 5v 39n 1n 1n 39n 80n)
+.tran 0 160n 0 100p
+.meas tran sum_000 FIND v(sum) AT=10n
+vinc vinc 0 pulse(0v 5v 79n 1n 1n 79n 160n)
+.meas tran cout_000 FIND v(cout) AT=10n
+.meas tran sum_100 FIND v(sum) AT=30n
+.meas tran cout_100 FIND v(cout) AT=30n
+.meas tran sum_010 FIND v(sum) AT=50n
+.meas tran cout_010 FIND v(cout) AT=50n
+.meas tran sum_110 FIND v(sum) AT=70n
+.meas tran cout_110 FIND v(cout) AT=70n
+.meas tran sum_001 FIND v(sum) AT=90n
+.meas tran cout_001 FIND v(cout) AT=90n
+.meas tran sum_101 FIND v(sum) AT=110n
+.meas tran cout_101 FIND v(cout) AT=110n
+.meas tran sum_011 FIND v(sum) AT=130n
+.meas tran cout_011 FIND v(cout) AT=130n
+.meas tran sum_111 FIND v(sum) AT=150n
+.meas tran cout_111 FIND v(cout) AT=150n
+.END

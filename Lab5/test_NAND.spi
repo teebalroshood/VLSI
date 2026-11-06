@@ -1,0 +1,41 @@
+*** SPICE deck for cell test_NAND{sch} from library Lab5
+*** Created on Thu Oct 29, 2026 15:22:49
+*** Last revised on Thu Oct 29, 2026 17:08:14
+*** Written on Thu Oct 29, 2026 17:09:13 by Electric VLSI Design System, version 9.08
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+*CMOS/BULK-NWELL (PRELIMINARY PARAMETERS)
+.MODEL N NMOS LEVEL=1
++KP=60E-6 VTO=0.7 GAMMA=0.3 LAMBDA=0.05 PHI=0.6
++LD=0.05E-6 TOX=40E-9 CGSO=2.0E-10 CGDO=2.0E-10 CJ=2e-4
+.MODEL P PMOS LEVEL=1
++KP=20E-6 VTO=0.7 GAMMA=0.4 LAMBDA=0.05 PHI=0.6
++LD=0.05E-6 TOX=40E-9 CGSO=3.0E-10 CGDO=3.0E-10 CJ=2e-4
+.MODEL DIFFCAP D CJO=2e-4
+
+*** SUBCIRCUIT Lab5__NAND FROM CELL NAND{sch}
+.SUBCKT Lab5__NAND A B gnd Out vdd
+** GLOBAL gnd
+** GLOBAL vdd
+MnMOS Out A net@29 gnd N L=0.4U W=1.2U
+MnMOS_1 net@29 B gnd gnd N L=0.4U W=1.2U
+MpMOS vdd A Out vdd P L=0.4U W=1.2U
+MpMOS_1 vdd B Out vdd P L=0.4U W=1.2U
+.ENDS Lab5__NAND
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: test_NAND{sch}
+Ccap@0 gnd vout 0.1p
+XNAND@0 vina vinb gnd vout vdd Lab5__NAND
+
+* Spice Code nodes in cell cell 'test_NAND{sch}'
+vdd vdd 0 DC 5
+vina vina 0 pulse(0v 5v 19n 1n 1n 19n 40n)
+vinb vinb 0 pulse(0v 5v 39n 1n 1n 39n 80n)
+.tran 0 80n 0 100p
+.meas tran vout_A0B0 FIND v(vout) AT=15n
+.meas tran vout_A1B0 FIND v(vout) AT=35n
+.meas tran vout_A0B1 FIND v(vout) AT=55n
+.meas tran vout_A1B1 FIND v(vout) AT=75n
+.END
